@@ -19,10 +19,9 @@
   },
   "devDependencies": {
     "father": "^2.16.0",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3",
+    "gh-pages": "^2.1.1",
+    "np": "^5.2.1"
   },
-  "license": "MIT",
-  "dependencies": {
-    "gh-pages": "^2.1.1"
-  }
+  "license": "MIT"
 }
