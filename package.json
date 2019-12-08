@@ -8,7 +8,6 @@
     "name": "chenshuai2144",
     "email": "qixian.cs@outlook.com"
   },
-  "repository": "/github-contributors-list",
   "scripts": {
     "dev": "father doc dev",
     "build": "father build"
