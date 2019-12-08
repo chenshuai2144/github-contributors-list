@@ -11,5 +11,32 @@ import AvatarList from './';
 
 ## simple
 
-<AvatarList repo="ant-design" owner="ant-design" fileName="/components/layout/index.en-US.md" />
+<AvatarList
+  repo="ant-design"
+  owner="ant-design"
+  fileName="/components/layout/index.en-US.md"
+/>;
 
+
+## render Item
+
+<AvatarList
+  repo="ant-design"
+  owner="ant-design"
+  fileName="/components/layout/index.en-US.md"
+  renderItem={item => {
+    return (
+      <div
+        style={{
+          marginRight: 8,
+          overflow: 'hidden',
+          border: '1px solid red'
+        }}
+      >
+        <a href={`https://github.com/${item.username}`}>
+          <img width={24} src={item.url} alt={item.username} />
+        </a>
+      </div>
+    );
+  }}
+/>;

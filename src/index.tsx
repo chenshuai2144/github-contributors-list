@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
+export interface AvatarListItem {
+  username: string;
+  url: string;
+}
+
 export interface ButtonProps {
   className?: string;
   style?: React.CSSProperties;
   fileName: string;
   owner: string;
   repo: string;
-}
-
-export interface AvatarListItem {
-  username: string;
-  url: string;
+  renderItem?: (item: AvatarListItem) => React.ReactNode;
 }
 
 // 获取头像列表
@@ -23,7 +24,7 @@ const getAvatarList = async ({
   repo: string;
   fileName: string;
 }): Promise<AvatarListItem[]> => {
-  const url = `http://localhost:7071/api/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}`;
+  const url = `https://github-contributors-list.azurewebsites.net/api/getAvatarList?code=GPhCUq8TpjewUtWN4SK1bo71AfEtOw8utSjqaqbFcmWB1sThCKfsHQ==&filename=${fileName}&owner=${owner}&repo=${repo}`;
   const data = await fetch(url, { mode: 'cors' })
     .then(res => res.json())
     .catch(e => console.log(e));
@@ -33,7 +34,14 @@ const getAvatarList = async ({
   return data;
 };
 
-const AvatarList: React.FC<ButtonProps> = function({ className, repo, owner, style, fileName }) {
+const AvatarList: React.FC<ButtonProps> = function({
+  className,
+  renderItem,
+  repo,
+  owner,
+  style,
+  fileName,
+}) {
   const [list, setList] = useState<AvatarListItem[]>([]);
   useEffect(() => {
     getAvatarList({ owner, repo, fileName }).then(data => {
@@ -53,6 +61,9 @@ const AvatarList: React.FC<ButtonProps> = function({ className, repo, owner, sty
         }}
       >
         {list.map(item => {
+          if (renderItem) {
+            return renderItem(item);
+          }
           return (
             <li
               style={{
