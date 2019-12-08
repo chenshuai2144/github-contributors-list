@@ -1,12 +1,18 @@
-# @umi-material/github-contributors-list
+# github-contributors-list
 
+可以显示某个 filename 的 contributors 列表。
 
+> 个人作品，请勿用于生产环境
 
 ## Usage
 
-```sh
-umi block https://github.com//tree/master/github-contributors-list
+```tsx
+
+import AvatarList from 'github-contributors-list';
+
+<AvatarList repo="ant-design" owner="ant-design" fileName="/components/layout/index.en-US.md" />
 ```
+
 
 ## LICENSE
 

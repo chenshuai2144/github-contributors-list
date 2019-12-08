@@ -4,6 +4,8 @@ export interface ButtonProps {
   className?: string;
   style?: React.CSSProperties;
   fileName: string;
+  owner: string;
+  repo: string;
 }
 
 export interface AvatarListItem {
@@ -12,50 +14,58 @@ export interface AvatarListItem {
 }
 
 // 获取头像列表
-const getAvatarList = async (filename: string) => {
-  const sourcePath = 'https://github.com/ant-design/ant-design/contributors-list/master/';
-  const url = `${sourcePath}${filename}`;
-  const html = await fetch(url, { mode: 'cors' })
-    .then(res => res.text())
+const getAvatarList = async ({
+  fileName,
+  repo,
+  owner,
+}: {
+  owner: string;
+  repo: string;
+  fileName: string;
+}): Promise<AvatarListItem[]> => {
+  const url = `http://localhost:7071/api/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}`;
+  const data = await fetch(url, { mode: 'cors' })
+    .then(res => res.json())
     .catch(e => console.log(e));
-  if (!html) {
+  if (!data) {
     return [];
   }
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  div.querySelectorAll('li a').forEach(ele => {
-    const img = ele.querySelector('img');
-    if (!img) {
-      return;
-    }
-    data.push({
-      username: (ele.textContent || '').trim(),
-      url: img.src,
-    });
-  });
-  const data: AvatarListItem[] = [];
-
   return data;
 };
 
-const AvatarList: React.FC<ButtonProps> = function({ className, style, fileName }) {
+const AvatarList: React.FC<ButtonProps> = function({ className, repo, owner, style, fileName }) {
   const [list, setList] = useState<AvatarListItem[]>([]);
   useEffect(() => {
-    getAvatarList(fileName).then(data => {
+    getAvatarList({ owner, repo, fileName }).then(data => {
       setList(data);
     });
   }, []);
-  const sourcePath = 'https://github.com/ant-design/ant-design/contributors-list/master';
-  const url = `${sourcePath}${fileName}`;
-  fetch('http://api.github.com/repos/octocat/Hello-World/contributors');
   return (
     <>
-      <ul className={className} style={style}>
+      <ul
+        className={className}
+        style={{
+          display: 'flex',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0,
+          ...style,
+        }}
+      >
         {list.map(item => {
           return (
-            <a href={`https://github.com/${item.username}`}>
-              <img src={item.username} alt={item.username} />
-            </a>
+            <li
+              style={{
+                marginRight: 8,
+                borderRadius: 20,
+                overflow: 'hidden',
+                border: '1px solid #ddd',
+              }}
+            >
+              <a href={`https://github.com/${item.username}`}>
+                <img width={40} src={item.url} alt={item.username} />
+              </a>
+            </li>
           );
         })}
       </ul>
