@@ -45,6 +45,7 @@ const AvatarList: React.FC<ButtonProps> = function({
   const [list, setList] = useState<AvatarListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
+    setLoading(true);
     getAvatarList({ owner, repo, fileName })
       .then(data => {
         setList(data);
