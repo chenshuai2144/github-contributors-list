@@ -4,3 +4,4 @@
 /.docz
 /node_modules
 function/yarn.lock
+.doc

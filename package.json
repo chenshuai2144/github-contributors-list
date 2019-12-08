@@ -10,7 +10,9 @@
   },
   "scripts": {
     "dev": "father doc dev",
-    "build": "father build"
+    "build": "father build",
+    "prepublishOnly": "npm run build && np --no-cleanup --yolo --no-publish",
+    "site": "father doc build && gh-pages -d ./.doc"
   },
   "peerDependencies": {
     "react": "16.x"
@@ -19,5 +21,8 @@
     "father": "^2.16.0",
     "typescript": "^3.3.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gh-pages": "^2.1.1"
+  }
 }
