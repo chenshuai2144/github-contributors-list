@@ -53,7 +53,7 @@ const AvatarList: React.FC<ButtonProps> = function({
       .catch(() => {
         setLoading(false);
       });
-  }, []);
+  }, [owner, repo, fileName]);
 
   if (loading) {
     return <div>{(renderItem && renderItem({}, true)) || <span>loading</span>}</div>;
