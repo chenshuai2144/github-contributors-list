@@ -1,6 +1,6 @@
 {
   "name": "github-contributors-list",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -19,9 +19,9 @@
   },
   "devDependencies": {
     "father": "^2.16.0",
-    "typescript": "^3.3.3",
     "gh-pages": "^2.1.1",
-    "np": "^5.2.1"
+    "np": "^5.2.1",
+    "typescript": "^3.3.3"
   },
   "license": "MIT"
 }
