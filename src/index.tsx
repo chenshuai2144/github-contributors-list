@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 export interface AvatarListItem {
-  username: string;
-  url: string;
+  username?: string;
+  url?: string;
 }
 
 export interface ButtonProps {
@@ -11,7 +11,7 @@ export interface ButtonProps {
   fileName: string;
   owner: string;
   repo: string;
-  renderItem?: (item: AvatarListItem) => React.ReactNode;
+  renderItem?: (item?: AvatarListItem, loading?: boolean) => React.ReactNode;
 }
 
 // 获取头像列表
@@ -43,11 +43,21 @@ const AvatarList: React.FC<ButtonProps> = function({
   fileName,
 }) {
   const [list, setList] = useState<AvatarListItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
-    getAvatarList({ owner, repo, fileName }).then(data => {
-      setList(data);
-    });
+    getAvatarList({ owner, repo, fileName })
+      .then(data => {
+        setList(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return <div>{(renderItem && renderItem({}, true)) || <span>loading</span>}</div>;
+  }
   return (
     <>
       <ul
@@ -62,7 +72,7 @@ const AvatarList: React.FC<ButtonProps> = function({
       >
         {list.map(item => {
           if (renderItem) {
-            return renderItem(item);
+            return renderItem(item, loading);
           }
           return (
             <li
