@@ -57,7 +57,20 @@ const AvatarList: React.FC<ButtonProps> = function({
   }, [owner, repo, fileName]);
 
   if (loading) {
-    return <div>{(renderItem && renderItem({}, true)) || <span>loading</span>}</div>;
+    return (
+      <div
+        className={className}
+        style={{
+          display: 'flex',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0,
+          ...style,
+        }}
+      >
+        {(renderItem && renderItem({}, true)) || <span>loading</span>}
+      </div>
+    );
   }
   return (
     <>
