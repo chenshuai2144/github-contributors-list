@@ -6,7 +6,12 @@ const getAvatarList = async ({ filename, owner, repo }) => {
   const sourcePath = `https://github.com/${owner}/${repo}/contributors-list/master/`;
   const url = `${sourcePath}${filename}`;
   const html = await fetch(url)
-    .then(res => res.text())
+    .then(res => {
+      if (res.status === 200) {
+        return res.text();
+      }
+      return Promise.resolve(null);
+    })
     .catch(e => console.log(e));
   if (!html) {
     return [];
