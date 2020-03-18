@@ -24,7 +24,7 @@ const getAvatarList = async ({
   repo: string;
   fileName: string;
 }): Promise<AvatarListItem[]> => {
-  const url = `https://github-contributors-list.azurewebsites.net/api/getAvatarList?code=GPhCUq8TpjewUtWN4SK1bo71AfEtOw8utSjqaqbFcmWB1sThCKfsHQ==&filename=${fileName}&owner=${owner}&repo=${repo}`;
+  const url = `https://proapi.azurewebsites.net/doc/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}`;
   const data = await fetch(url, { mode: 'cors' })
     .then(res => res.json())
     .catch(e => console.log(e));
@@ -81,6 +81,7 @@ const AvatarList: React.FC<ButtonProps> = function({
           listStyle: 'none',
           margin: 0,
           padding: 0,
+          flexFlow: 'wrap',
           ...style,
         }}
       >
