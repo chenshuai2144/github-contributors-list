@@ -23,7 +23,7 @@
     "url": "git+https://github.com/chenshuai2144/github-contributors-list"
   },
   "peerDependencies": {
-    "react": "16.x"
+    "react": ">=16.0.0"
   },
   "devDependencies": {
     "father": "^2.16.0",
