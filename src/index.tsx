@@ -11,7 +11,7 @@ export interface ButtonProps {
   fileName: string;
   owner: string;
   repo: string;
-  filter: (item: AvatarListItem) => boolean;
+  filter?: (item: AvatarListItem) => boolean;
   renderItem?: (item?: AvatarListItem, loading?: boolean) => React.ReactNode;
 }
 
