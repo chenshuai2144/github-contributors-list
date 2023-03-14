@@ -11,6 +11,7 @@ export interface ButtonProps {
   fileName: string;
   owner: string;
   repo: string;
+  filter?: (item: AvatarListItem) => boolean;
   renderItem?: (item?: AvatarListItem, loading?: boolean) => React.ReactNode;
 }
 
@@ -41,6 +42,7 @@ const AvatarList: React.FC<ButtonProps> = function({
   owner,
   style,
   fileName,
+  filter = () => true,
 }) {
   const [list, setList] = useState<AvatarListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -85,7 +87,7 @@ const AvatarList: React.FC<ButtonProps> = function({
           ...style,
         }}
       >
-        {list.map(item => {
+        {list.filter(filter).map(item => {
           if (renderItem) {
             return renderItem(item, loading);
           }
