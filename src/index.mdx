@@ -24,6 +24,7 @@ import AvatarList from './';
   repo="ant-design"
   owner="ant-design"
   fileName="/components/layout/index.en-US.md"
+  filter={item => item.username === 'testuser'}
   renderItem={(item, loading) => {
     if(loading){
        return "loading"
