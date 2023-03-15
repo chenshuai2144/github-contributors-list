@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 export interface AvatarListItem {
   username?: string;
@@ -12,8 +12,13 @@ export interface ButtonProps {
   owner: string;
   repo: string;
   filter?: (item: AvatarListItem) => boolean;
+  emptyRender?: (fileName: string, owner: string, repo: string) => React.ReactNode;
   renderItem?: (item?: AvatarListItem, loading?: boolean) => React.ReactNode;
+  cache?: boolean;
 }
+
+const successCbQueue: ((items: AvatarListItem[]) => void)[] = [];
+const fetchLock: Record<string, boolean> = {};
 
 // 获取头像列表
 const getAvatarList = async ({
@@ -43,20 +48,39 @@ const AvatarList: React.FC<ButtonProps> = function({
   style,
   fileName,
   filter = () => true,
+  cache = false,
+  emptyRender,
 }) {
   const [list, setList] = useState<AvatarListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
+    if (cache && fetchLock[fileName]) {
+      successCbQueue.push((items) => {
+        setList(items);
+        setLoading(false);
+      });
+      return;
+    }
+    // loading
+    fetchLock[fileName] = true;
     setLoading(true);
     getAvatarList({ owner, repo, fileName })
       .then(data => {
         setList(data);
         setLoading(false);
+        cache && successCbQueue.forEach(fn => fn(data));
       })
       .catch(() => {
         setLoading(false);
+        fetchLock[fileName] = false;
       });
   }, [owner, repo, fileName]);
+
+  useEffect(() => () => {
+    fetchLock[fileName] = false;
+    successCbQueue.splice(0, successCbQueue.length);
+  }, [fileName]);
+
 
   if (loading) {
     return (
@@ -74,6 +98,9 @@ const AvatarList: React.FC<ButtonProps> = function({
       </div>
     );
   }
+
+  const displayList = list.filter(filter);
+
   return (
     <>
       <ul
@@ -87,7 +114,7 @@ const AvatarList: React.FC<ButtonProps> = function({
           ...style,
         }}
       >
-        {list.filter(filter).map(item => {
+        {displayList.map(item => {
           if (renderItem) {
             return renderItem(item, loading);
           }
@@ -106,6 +133,7 @@ const AvatarList: React.FC<ButtonProps> = function({
             </li>
           );
         })}
+        {displayList.length === 0 && emptyRender && emptyRender(fileName, owner, repo)}
       </ul>
     </>
   );
