@@ -2,8 +2,8 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
 // 获取头像列表
-const getAvatarList = async ({ filename, owner, repo }) => {
-  const sourcePath = `https://github.com/${owner}/${repo}/contributors-list/master/`;
+const getAvatarList = async ({ filename, owner, repo, branch }) => {
+  const sourcePath = `https://github.com/${owner}/${repo}/contributors-list/${branch}/`;
   const url = `${sourcePath}${filename}`;
   const html = await fetch(url)
     .then(res => {
@@ -33,12 +33,13 @@ const getAvatarList = async ({ filename, owner, repo }) => {
 };
 
 const httpTrigger = async function(context, req) {
-  const { filename, repo, owner } = req.query;
+  const { filename, repo, owner, branch = 'master' } = req.query;
   if (filename && repo && owner) {
     const list = await getAvatarList({
       filename,
       repo,
       owner,
+      branch
     });
     context.res = {
       // status: 200, /* Defaults to 200 */

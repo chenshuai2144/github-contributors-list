@@ -12,9 +12,10 @@ export interface ButtonProps {
   owner: string;
   repo: string;
   filter?: (item: AvatarListItem) => boolean;
-  emptyRender?: (fileName: string, owner: string, repo: string) => React.ReactNode;
+  emptyRender?: (fileName: string, owner: string, repo: string, branch: string) => React.ReactNode;
   renderItem?: (item?: AvatarListItem, loading?: boolean) => React.ReactNode;
   cache?: boolean;
+  branch?: string;
 }
 
 const successCbQueue: ((items: AvatarListItem[]) => void)[] = [];
@@ -25,12 +26,14 @@ const getAvatarList = async ({
   fileName,
   repo,
   owner,
+  branch
 }: {
   owner: string;
   repo: string;
   fileName: string;
+  branch: string;
 }): Promise<AvatarListItem[]> => {
-  const url = `https://proapi.azurewebsites.net/doc/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}`;
+  const url = `https://proapi.azurewebsites.net/doc/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}&branch=${branch}`;
   const data = await fetch(url, { mode: 'cors' })
     .then(res => res.json())
     .catch(e => console.log(e));
@@ -50,6 +53,7 @@ const AvatarList: React.FC<ButtonProps> = function({
   filter = () => true,
   cache = false,
   emptyRender,
+  branch = 'master',
 }) {
   const [list, setList] = useState<AvatarListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -64,7 +68,7 @@ const AvatarList: React.FC<ButtonProps> = function({
     // loading
     fetchLock[fileName] = true;
     setLoading(true);
-    getAvatarList({ owner, repo, fileName })
+    getAvatarList({ owner, repo, fileName, branch })
       .then(data => {
         setList(data);
         setLoading(false);
@@ -133,7 +137,7 @@ const AvatarList: React.FC<ButtonProps> = function({
             </li>
           );
         })}
-        {displayList.length === 0 && emptyRender && emptyRender(fileName, owner, repo)}
+        {displayList.length === 0 && emptyRender && emptyRender(fileName, owner, repo, branch)}
       </ul>
     </>
   );
