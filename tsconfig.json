@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "jsx": "react",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "baseUrl": ".",
     "strict": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
-    },
-    "allowSyntheticDefaultImports": true
-  }
+      "@@/*": [".dumi/tmp/*"],
+      "@qixian.cs/github-contributors-list": ["src"],
+      "@qixian.cs/github-contributors-list/*": ["src/*", "*"]
+    }
+  },
+  "include": [".dumirc.ts", "src/**/*"]
 }

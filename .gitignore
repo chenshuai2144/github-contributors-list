@@ -1,7 +1,6 @@
-/yarn.lock
-/package-lock.json
+node_modules
 /dist
-/.docz
-/node_modules
-function/yarn.lock
-.doc
+.dumi/tmp
+.dumi/tmp-test
+.dumi/tmp-production
+.DS_Store

@@ -1,35 +1,75 @@
 {
   "name": "@qixian.cs/github-contributors-list",
-  "version": "1.1.0",
-  "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "authors": {
-    "name": "chenshuai2144",
-    "email": "qixian.cs@outlook.com"
-  },
+  "version": "0.0.1",
+  "description": "A react library developed with dumi",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "father doc dev",
+    "start": "npm run dev",
+    "dev": "dumi dev",
     "build": "father build",
-    "site": "father doc build && gh-pages -d ./.doc",
-    "prepublishOnly": "npm run build && np --no-cleanup --yolo --no-publish"
+    "build:watch": "father dev",
+    "docs:build": "dumi build",
+    "prepare": "husky install && dumi setup",
+    "doctor": "father doctor",
+    "lint": "npm run lint:es && npm run lint:css",
+    "lint:css": "stylelint \"{src,test}/**/*.{css,less}\"",
+    "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
+    "prepublishOnly": "father doctor && npm run build"
   },
-  "homepage": "https://github.com/chenshuai2144/github-contributors-list",
-  "bugs": {
-    "url": "https://github.com/chenshuai2144/github-contributors-list/issues"
+  "authors": [],
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chenshuai2144/github-contributors-list"
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write --no-error-on-unmatched-pattern"
+    ],
+    "*.{css,less}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
-    "react": ">=16.0.0"
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
   "devDependencies": {
-    "father": "^2.16.0",
-    "gh-pages": "^2.1.1",
-    "np": "^5.2.1",
-    "typescript": "^3.3.3"
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@umijs/lint": "^4.0.0",
+    "dumi": "^2.2.13",
+    "eslint": "^8.23.0",
+    "father": "^4.1.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "prettier-plugin-organize-imports": "^3.0.0",
+    "prettier-plugin-packagejson": "^2.2.18",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "stylelint": "^14.9.1"
   },
-  "license": "MIT"
+  "dependencies": {
+    "swr": "^2.2.4"
+  }
 }

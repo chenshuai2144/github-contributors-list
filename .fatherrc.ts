@@ -1,9 +1,6 @@
-import { IBundleOptions } from 'father';
+import { defineConfig } from 'father';
 
-const options: IBundleOptions = {
-  cjs: 'rollup',
-  esm: 'rollup',
-  doc: { typescript: true },
-};
-
-export default options;
+export default defineConfig({
+  // more father config: https://github.com/umijs/father/blob/master/docs/config.md
+  esm: { output: 'dist' },
+});

@@ -1,18 +1,39 @@
-# github-contributors-list
+# @qixian.cs/github-contributors-list
 
-可以显示某个 filename 的 contributors 列表。
+[![NPM version](https://img.shields.io/npm/v/@qixian.cs/github-contributors-list.svg?style=flat)](https://npmjs.org/package/@qixian.cs/github-contributors-list)
+[![NPM downloads](http://img.shields.io/npm/dm/@qixian.cs/github-contributors-list.svg?style=flat)](https://npmjs.org/package/@qixian.cs/github-contributors-list)
 
-> 个人作品，请勿用于生产环境
+A react library developed with dumi
 
 ## Usage
 
-```tsx
+TODO
 
-import AvatarList from 'github-contributors-list';
+## Options
 
-<AvatarList repo="ant-design" owner="ant-design" fileName="/components/layout/index.en-US.md" />
+TODO
+
+## Development
+
+```bash
+# install dependencies
+$ pnpm install
+
+# develop library by docs demo
+$ pnpm start
+
+# build library source code
+$ pnpm run build
+
+# build library source code in watch mode
+$ pnpm run build:watch
+
+# build docs
+$ pnpm run docs:build
+
+# check your project for potential problems
+$ pnpm run doctor
 ```
-
 
 ## LICENSE
 

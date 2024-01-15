@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 
 export interface AvatarListItem {
   username?: string;
@@ -18,15 +19,12 @@ export interface ButtonProps {
   branch?: string;
 }
 
-const successCbQueue: ((items: AvatarListItem[]) => void)[] = [];
-const fetchLock: Record<string, boolean> = {};
-
 // 获取头像列表
 const getAvatarList = async ({
   fileName,
   repo,
   owner,
-  branch
+  branch,
 }: {
   owner: string;
   repo: string;
@@ -35,15 +33,15 @@ const getAvatarList = async ({
 }): Promise<AvatarListItem[]> => {
   const url = `https://proapi.azurewebsites.net/doc/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}&branch=${branch}`;
   const data = await fetch(url, { mode: 'cors' })
-    .then(res => res.json())
-    .catch(e => console.log(e));
+    .then((res) => res.json())
+    .catch((e) => console.log(e));
   if (!data) {
     return [];
   }
   return data;
 };
 
-const AvatarList: React.FC<ButtonProps> = function({
+export const AvatarList: React.FC<ButtonProps> = ({
   className,
   renderItem,
   repo,
@@ -51,42 +49,16 @@ const AvatarList: React.FC<ButtonProps> = function({
   style,
   fileName,
   filter = () => true,
-  cache = false,
   emptyRender,
   branch = 'master',
-}) {
-  const [list, setList] = useState<AvatarListItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    if (cache && fetchLock[fileName]) {
-      successCbQueue.push((items) => {
-        setList(items);
-        setLoading(false);
-      });
-      return;
-    }
-    // loading
-    fetchLock[fileName] = true;
-    setLoading(true);
-    getAvatarList({ owner, repo, fileName, branch })
-      .then(data => {
-        setList(data);
-        setLoading(false);
-        cache && successCbQueue.forEach(fn => fn(data));
-      })
-      .catch(() => {
-        setLoading(false);
-        fetchLock[fileName] = false;
-      });
-  }, [owner, repo, fileName]);
-
-  useEffect(() => () => {
-    fetchLock[fileName] = false;
-    successCbQueue.splice(0, successCbQueue.length);
-  }, [fileName]);
-
-
-  if (loading) {
+}: ButtonProps) => {
+  const { data, isLoading } = useSWR(
+    `/doc/getAvatarList?filename=${fileName}&owner=${owner}&repo=${repo}&branch=${branch}`,
+    () => {
+      return getAvatarList({ owner, repo, fileName, branch });
+    },
+  );
+  if (isLoading) {
     return (
       <div
         className={className}
@@ -103,14 +75,14 @@ const AvatarList: React.FC<ButtonProps> = function({
     );
   }
 
-  const displayList = list.filter(filter);
-
+  const displayList = data?.filter(filter) || [];
   return (
     <>
       <ul
         className={className}
         style={{
           display: 'flex',
+          boxSizing: 'border-box',
           listStyle: 'none',
           margin: 0,
           padding: 0,
@@ -118,20 +90,28 @@ const AvatarList: React.FC<ButtonProps> = function({
           ...style,
         }}
       >
-        {displayList.map(item => {
+        {displayList.map((item) => {
           if (renderItem) {
-            return renderItem(item, loading);
+            return renderItem(item, isLoading);
           }
           return (
             <li
+              key={item.username}
               style={{
                 marginRight: 8,
                 borderRadius: 20,
+                boxSizing: 'border-box',
                 overflow: 'hidden',
                 border: '1px solid #ddd',
+                display: 'flex',
               }}
             >
-              <a href={`https://github.com/${item.username}`}>
+              <a
+                href={`https://github.com/${item.username}`}
+                style={{
+                  display: 'flex',
+                }}
+              >
                 <img width={40} src={item.url} alt={item.username} />
               </a>
             </li>
@@ -142,5 +122,3 @@ const AvatarList: React.FC<ButtonProps> = function({
     </>
   );
 };
-
-export default AvatarList;
