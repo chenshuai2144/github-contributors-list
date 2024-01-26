@@ -1,6 +1,6 @@
 {
   "name": "@qixian.cs/github-contributors-list",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A react library developed with dumi",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
