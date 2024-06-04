@@ -27,6 +27,10 @@
       "@commitlint/config-conventional"
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chenshuai2144/github-contributors-list"
+  },
   "lint-staged": {
     "*.{md,json}": [
       "prettier --write --no-error-on-unmatched-pattern"
